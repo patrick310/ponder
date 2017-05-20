@@ -33,6 +33,10 @@ class ProjectsPage extends StatelessWidget {
         appBar: new AppBar(
           title: new Text("Vision System Projects"),
         ),
-        body: new ProjectList(kProjects));
+        body: new ProjectList(kProjects),
+        floatingActionButton: new FloatingActionButton(
+            child: new Text("+"),
+            onPressed: null,
+            tooltip: "Creates a new vision system project"));
   }
 }
