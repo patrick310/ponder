@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 
 class CreateProjectPage extends StatefulWidget {
   const CreateProjectPage({Key key}) : super(key: key);
@@ -73,27 +72,47 @@ class CreateProjectPageState extends State<CreateProjectPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        key: _scaffoldKey,
-        appBar: new AppBar(
-          title: const Text('Start a Project'),
-        ),
-        body: new Form(
-            key: _formKey,
-            autovalidate: _autovalidate,
-            onWillPop: _warnUserAboutInvalidData,
-            child: new ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                children: <Widget>[
-                  new TextFormField(
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.subject),
-                      hintText: 'What will the system be looking at/for?',
-                      labelText: 'Subject *',
-                    ),
-                    onSaved: (String value) {
-                      project.subject = value;
-                    },
-                  ),
-                ])));
+      key: _scaffoldKey,
+      appBar: new AppBar(
+        title: const Text('Start a Project'),
+      ),
+      body: new Form(
+          key: _formKey,
+          autovalidate: _autovalidate,
+          onWillPop: _warnUserAboutInvalidData,
+          child: new ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: <Widget>[
+              new TextFormField(
+                decoration: const InputDecoration(
+                  icon: const Icon(Icons.subject),
+                  hintText: 'What will the system be looking at/for?',
+                  labelText: 'Subject *',
+                ),
+                onSaved: (String value) {
+                  project.subject = value;
+                },
+              ),
+              new TextFormField(
+                decoration: const InputDecoration(
+                  icon: const Icon(Icons.location_searching),
+                  hintText: 'Where will the camera be located?',
+                  labelText: 'Location *',
+                ),
+                onSaved: (String value) {
+                  project.location = value;
+                },
+              ),
+              new Container(
+                padding: const EdgeInsets.all(20.0),
+                alignment: const FractionalOffset(0.5, 0.5),
+                child: new RaisedButton(
+                  child: const Text('SUBMIT'),
+                  onPressed: _handleSubmitted,
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }
