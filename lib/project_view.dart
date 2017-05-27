@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'project_data.dart';
+import 'project_creation_view.dart';
 
 class _ProjectListItem extends ListTile {
   _ProjectListItem(Project project)
@@ -36,7 +37,13 @@ class ProjectsPage extends StatelessWidget {
         body: new ProjectList(kProjects),
         floatingActionButton: new FloatingActionButton(
             child: new Text("+"),
-            onPressed: null,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (_) => new CreateProjectPage(),
+                  ));
+            },
             tooltip: "Creates a new vision system project"));
   }
 }
