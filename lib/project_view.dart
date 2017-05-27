@@ -40,8 +40,7 @@ class ProjectsPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                   context,
-                  new MaterialPageRoute(
-                    builder: (_) => new CreateProjectPage(),
+                  new MaterialPageRoute<Project>(builder: CreateProjectPage())
                   ));
             },
             tooltip: "Creates a new vision system project"));

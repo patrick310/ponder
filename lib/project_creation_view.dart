@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-
 class CreateProjectPage extends StatefulWidget {
   const CreateProjectPage({Key key}) : super(key: key);
 
@@ -27,19 +26,20 @@ class CreateProjectPageState extends State<CreateProjectPage> {
         .showSnackBar(new SnackBar(content: new Text(value)));
   }
 
-  bool _autovalidate = false;
+  bool _autoValidate = false;
   bool _formWasEdited = false;
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   void _handleSubmitted() {
     final FormState form = _formKey.currentState;
     if (!form.validate()) {
-      _autovalidate = true;
+      _autoValidate = true;
       showInSnackBar('Please enter a valid model type');
     } else {
       form.save();
+      Navigator.pop(context);
       showInSnackBar(
           'New project created for ${project.subject} at ${project.location}');
-    }
+    } //Haven't figured out how to get the snackbar to show. may need to be on main
   }
 
   Future<bool> _warnUserAboutInvalidData() async {
@@ -78,7 +78,7 @@ class CreateProjectPageState extends State<CreateProjectPage> {
       ),
       body: new Form(
           key: _formKey,
-          autovalidate: _autovalidate,
+          autovalidate: _autoValidate,
           onWillPop: _warnUserAboutInvalidData,
           child: new ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
