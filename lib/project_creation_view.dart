@@ -1,43 +1,99 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class CreateScreen extends StatefulWidget {
+import 'package:flutter/services.dart';
+
+class CreateProjectPage extends StatefulWidget {
+  const CreateProjectPage({Key key}) : super(key: key);
+
+  static const String routeName = 'project/create-form';
+
   @override
-  State createState() => new InputViewState();
+  CreateProjectPageState createState() => new CreateProjectPageState();
 }
 
-class InputViewState extends State<CreateScreen> {
-  final TextEditingController _textController = new TextEditingController();
+class ProjectData {
+  String subject = '';
+  String location = '';
+}
+
+class CreateProjectPageState extends State<CreateProjectPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  ProjectData project = new ProjectData();
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(value)));
+  }
+
+  bool _autovalidate = false;
+  bool _formWasEdited = false;
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  void _handleSubmitted() {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) {
+      _autovalidate = true;
+      showInSnackBar('Please enter a valid model type');
+    } else {
+      form.save();
+      showInSnackBar(
+          'New project created for ${project.subject} at ${project.location}');
+    }
+  }
+
+  Future<bool> _warnUserAboutInvalidData() async {
+    final FormState form = _formKey.currentState;
+    if (form == null || !_formWasEdited || form.validate()) return true;
+    return await showDialog<bool>(
+          context: context,
+          child: new AlertDialog(
+            title: const Text('This form has errors'),
+            content: const Text('Really leave this form?'),
+            actions: <Widget>[
+              new FlatButton(
+                child: const Text('YES'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+              new FlatButton(
+                child: const Text('NO'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Start a Project")),
-      body: _buildCreateProjectForm()
-      );
-  }
-
-  Widget _buildCreateProjectForm() {
-    return new ListView(
-      children: [
-        new Image.asset(
-          'images/lake.jpg',
-          width: 600.0,
-          height: 240.0,
-          fit: BoxFit.cover,
+        key: _scaffoldKey,
+        appBar: new AppBar(
+          title: const Text('Start a Project'),
         ),
-        new Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: new TextField(
-            controller: _textController,
-            onSubmitted: _handleSubmitted,
-            decoration:
-                new InputDecoration.collapsed(hintText: "The first, the only"),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _handleSubmitted(String text) {
-    _textController.clear();
+        body: new Form(
+            key: _formKey,
+            autovalidate: _autovalidate,
+            onWillPop: _warnUserAboutInvalidData,
+            child: new ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                children: <Widget>[
+                  new TextFormField(
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.subject),
+                      hintText: 'What will the system be looking at/for?',
+                      labelText: 'Subject *',
+                    ),
+                    onSaved: (String value) {
+                      project.subject = value;
+                    },
+                  ),
+                ])));
   }
 }

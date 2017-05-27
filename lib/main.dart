@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'project_view.dart';
+import 'project_creation_view.dart';
 
 void main() {
   runApp(new MaterialApp(
@@ -7,6 +8,6 @@ void main() {
 
     theme: new ThemeData(primarySwatch: Colors.blue),
 
-    home: new ProjectsPage()
+    home: new CreateProjectPage()
   ));
 }
